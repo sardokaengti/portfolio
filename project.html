@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projects | Sardoka Engti</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+    <nav class="navbar">
+        <h2 class="logo"><a href="index.html">Sardoka Engti</a></h2>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="skills.html">Skills</a></li>
+            <li><a href="project.html" class="active" aria-current="page">Projects</a></li>
+            <li><a href="contacts.html">Contact</a></li>
+        </ul>
+    </nav>
+    </header>
+
+    <section class="section feature-section reveal">
+        <h1 class="reveal">Projects</h1>
+        <p class="feature-intro reveal">Selected work combining domain science and machine learning workflows.</p>
+        <div class="project-filters reveal" role="group" aria-label="Project filters">
+            <button class="filter-btn active" type="button" data-filter="all">All</button>
+            <button class="filter-btn" type="button" data-filter="climate">Climate</button>
+            <button class="filter-btn" type="button" data-filter="ml">Machine Learning</button>
+            <button class="filter-btn" type="button" data-filter="python">Python</button>
+            <button class="filter-btn" type="button" data-filter="matlab">MATLAB</button>
+        </div>
+        <div class="feature-grid project-grid">
+            <article class="feature-card project-card reveal" data-tags="climate python">
+                <h2>SST EOF Analysis</h2>
+                <p>Performed EOF analysis on sea surface temperature anomalies over the DMI region to identify dominant variability modes.</p>
+                <span class="skill-tag">Python | EOF | Climate Modes</span>
+            </article>
+            <article class="feature-card project-card reveal" data-tags="climate matlab">
+                <h2>Monsoon Variability Signals</h2>
+                <p>Explored seasonal rainfall patterns using reanalysis datasets and anomaly decomposition.</p>
+                <span class="skill-tag">MATLAB | Reanalysis | Diagnostics</span>
+            </article>
+            <article class="feature-card project-card reveal" data-tags="ml climate python">
+                <h2>ML Climate Baseline</h2>
+                <p>Built baseline models for pattern recognition in ocean-atmosphere indices.</p>
+                <span class="skill-tag">Scikit-learn | Feature Engineering</span>
+            </article>
+        </div>
+    </section>
+
+    <script src="script.js"></script>
+</body>
+</html>
