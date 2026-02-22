@@ -393,7 +393,7 @@ a {
     background-position: center;
     position: relative;
     isolation: isolate;
-    transition: transform 0.2s ease, filter 0.2s ease;
+    transition: transform 0.25s ease, filter 0.25s ease;
 }
 
 .quick-card::before {
@@ -405,37 +405,43 @@ a {
     z-index: -1;
 }
 
-.quick-card:hover {
-    transform: translateY(-2px);
-    filter: brightness(1.05);
+.quick-grid:hover .quick-card {
+    transform: scale(0.82);
+    filter: brightness(0.75);
+}
+
+.quick-grid:hover .quick-card:hover {
+    transform: scale(1.2) translateY(-4px);
+    filter: brightness(1.15);
+    z-index: 3;
 }
 
 .quick-skills {
-    background-image: url("image/skills.jpg");
+    background: linear-gradient(135deg, #1f2937, #374151);
 }
 
 .quick-projects {
-    background-image: url("image/project.jpg");
+    background: linear-gradient(135deg, #1f2937, #374151);
 }
 
 .quick-contact {
-    background-image: url("image/contact.jpeg");
+    background: linear-gradient(135deg, #1f2937, #374151);
 }
 
 .continue-blogs {
-    background-image: url("image/blogs.jpg");
+    background: linear-gradient(135deg, #1f2937, #374151);
 }
 
 .continue-reading {
-    background-image: url("image/reading.jpeg");
+    background: linear-gradient(135deg, #1f2937, #374151);
 }
 
 .continue-philosophy {
-    background-image: url("image/philosphy.jpg");
+    background: linear-gradient(135deg, #1f2937, #374151);
 }
 
 .continue-movies {
-    background-image: url("image/ott.jpg");
+    background: linear-gradient(135deg, #1f2937, #374151);
 }
 
 .feature-section {
