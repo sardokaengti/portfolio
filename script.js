@@ -8,8 +8,11 @@ function scrollToSection(id) {
 
 document.addEventListener("DOMContentLoaded", () => {
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const commandNav = document.querySelector(".command-nav");
     const revealItems = Array.from(document.querySelectorAll(".reveal"));
     const hero = document.querySelector(".hero");
+    const heroData = document.querySelector(".hero-data");
+    const datasetStrip = document.querySelector(".dataset-strip");
     const particleLayer = document.querySelector(".particle-layer");
 
     revealItems.forEach((item, index) => {
@@ -29,6 +32,37 @@ document.addEventListener("DOMContentLoaded", () => {
         revealItems.forEach((item) => revealObserver.observe(item));
     } else {
         revealItems.forEach((item) => item.classList.add("visible"));
+    }
+
+    if (commandNav) {
+        const navContainer = commandNav.querySelector(".nav-links");
+        const indicator = navContainer ? navContainer.querySelector(".nav-indicator") : null;
+        const navLinks = navContainer ? Array.from(navContainer.querySelectorAll("a")) : [];
+
+        if (navContainer && indicator && navLinks.length > 0) {
+            const activeLink = navContainer.querySelector("a.active") || navLinks[0];
+            let pinnedLink = activeLink;
+
+            const moveIndicator = (link) => {
+                if (!link) return;
+                indicator.style.width = `${link.offsetWidth}px`;
+                indicator.style.transform = `translateX(${link.offsetLeft}px)`;
+                indicator.style.opacity = "1";
+            };
+
+            moveIndicator(activeLink);
+
+            navLinks.forEach((link) => {
+                link.addEventListener("mouseenter", () => moveIndicator(link));
+                link.addEventListener("focus", () => moveIndicator(link));
+                link.addEventListener("click", () => {
+                    pinnedLink = link;
+                });
+            });
+
+            navContainer.addEventListener("mouseleave", () => moveIndicator(pinnedLink));
+            window.addEventListener("resize", () => moveIndicator(pinnedLink));
+        }
     }
 
     const filterButtons = Array.from(document.querySelectorAll(".filter-btn"));
@@ -109,6 +143,76 @@ document.addEventListener("DOMContentLoaded", () => {
 
             particleLayer.appendChild(particle);
         }
+    }
+
+    if (heroData) {
+        const metricValues = Array.from(heroData.querySelectorAll(".metric-value"));
+        const easeOutCubic = (t) => 1 - ((1 - t) ** 3);
+        const miniBars = datasetStrip ? Array.from(datasetStrip.querySelectorAll(".mini-bar")) : [];
+
+        miniBars.forEach((bar, index) => {
+            const normalized = Number.parseFloat(bar.dataset.bar || "0");
+            const barValue = Math.max(10, Math.min(100, normalized));
+            bar.style.setProperty("--bar", barValue.toFixed(2));
+            bar.style.setProperty("--bar-delay", `${index * 90}ms`);
+        });
+
+        const animateMetrics = () => {
+            if (heroData.classList.contains("is-animated")) return;
+            heroData.classList.add("is-animated");
+            if (datasetStrip) {
+                datasetStrip.classList.add("is-animated");
+            }
+
+            metricValues.forEach((node, index) => {
+                const target = Number.parseFloat(node.dataset.target || "");
+                const decimals = Number.parseInt(node.dataset.decimals || "0", 10);
+                const prefix = node.dataset.prefix || "";
+                const suffix = node.dataset.suffix || "";
+
+                if (!Number.isFinite(target)) return;
+
+                if (prefersReducedMotion) {
+                    node.textContent = `${prefix}${target.toFixed(decimals)}${suffix}`;
+                    return;
+                }
+
+                const duration = 1100 + (index * 140);
+                const startTime = performance.now();
+
+                const tick = (now) => {
+                    const progress = Math.min((now - startTime) / duration, 1);
+                    const eased = easeOutCubic(progress);
+                    const value = target * eased;
+                    node.textContent = `${prefix}${value.toFixed(decimals)}${suffix}`;
+
+                    if (progress < 1) {
+                        window.requestAnimationFrame(tick);
+                    } else {
+                        node.textContent = `${prefix}${target.toFixed(decimals)}${suffix}`;
+                    }
+                };
+
+                window.requestAnimationFrame(tick);
+            });
+        };
+
+        if ("IntersectionObserver" in window) {
+            const metricObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        animateMetrics();
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.4 });
+
+            metricObserver.observe(heroData);
+        } else {
+            animateMetrics();
+        }
+    } else if (datasetStrip) {
+        datasetStrip.classList.add("is-animated");
     }
 
     const typedRole = document.getElementById("typed-role");
